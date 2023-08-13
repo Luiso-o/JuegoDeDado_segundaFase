@@ -1,22 +1,17 @@
 package Luis.JuegoDados.model.services;
 
-import Luis.JuegoDados.model.dto.JugadorDtoJpa;
 import Luis.JuegoDados.model.dto.PartidaDtoJpa;
 import Luis.JuegoDados.model.entity.JugadorEntityJpa;
 import Luis.JuegoDados.model.entity.PartidaEntityJpa;
 import Luis.JuegoDados.model.repository.JugadorRepositoryJpa;
 import Luis.JuegoDados.model.repository.PartidaRepositoryJpa;
-import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -79,11 +74,6 @@ public class PartidaServiceJpa {
                 .collect(Collectors.toList());
 
     }
-
-
-
-
-
 
     //Metodos privados ---------------------------------------------------------------->>
     /**

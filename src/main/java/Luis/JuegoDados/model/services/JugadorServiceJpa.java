@@ -11,10 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @AllArgsConstructor
 @Builder
@@ -43,16 +42,25 @@ public class JugadorServiceJpa {
     }
 
     /**
-     * Busca un jugador en el sistema por su ID.
-     * <p>
-     * Este método permite la búsqueda de un jugador en el sistema utilizando su ID proporcionado.
-     * Si no se encuentra un jugador con el ID dado, se lanzará una excepción.
+     * Busca y devuelve un jugador por su ID.
      *
      * @param id El ID del jugador que se desea buscar.
-     * @return Un objeto JugadorDtoJpa que representa al jugador encontrado.
+     * @return El objeto JugadorEntityJpa que representa al jugador con el ID especificado.
+     * @throws NotFoundException Si la lista de jugadores está vacía.
      * @throws RuntimeException Si no se encuentra un jugador con el ID proporcionado.
      */
     public JugadorEntityJpa buscarJugadorPorId(Long id){
+
+        try {
+            List<JugadorEntityJpa> misJugadores = jugadorRepositoryJpa.findAll();
+
+            if (misJugadores.isEmpty()) {
+                throw new NotFoundException("Lista de jugadores vacía");
+            }
+        } catch (NotFoundException e) {
+            throw new NotFoundException("Lista de jugadores vacía");
+        }
+
      return jugadorRepositoryJpa.findById(id)
              .orElseThrow(() -> new RuntimeException("No se encontró el jugador con el ID proporcionado."));
     }
@@ -72,10 +80,9 @@ public class JugadorServiceJpa {
     }
 
     /**
-     * Actualiza el porcentaje de éxito de un jugador en la base de datos y devuelve la información actualizada en forma de DTO.
+     * Actualiza el porcentaje de éxito de un jugador y guarda los datos actualizados en la base de datos.
      *
-     * @param jugador El objeto de entidad de jugador del cual se desea actualizar el porcentaje de éxito.
-     * @return Un objeto DTO que representa al jugador actualizado.
+     * @param jugador El objeto JugadorEntityJpa que representa al jugador cuyo porcentaje de éxito se actualizará.
      */
    @Transactional
     public void actualizarPorcentajeExitoJugador(JugadorEntityJpa jugador){
@@ -93,7 +100,7 @@ public class JugadorServiceJpa {
     public List<JugadorDtoJpa> listaJugadores() {
         List<JugadorEntityJpa> jugadores = jugadorRepositoryJpa.findAll();
         if (jugadores.isEmpty()) {
-            throw new NotFoundException("No se encontraron jugadores.");
+            throw new NotFoundException("Lista de Jugadores vacía");
         }
         return jugadores.stream().map(this::pasarEntidadADto)
                 .collect(Collectors.toList());
@@ -114,9 +121,71 @@ public class JugadorServiceJpa {
         return porcentajeExitoGlobal/jugadores.size();
     }
 
+    /**
+     * Obtiene una lista de los peores jugadores basados en su porcentaje de éxito.
+     *
+     * @return Una lista de objetos JugadorDtoJpa que representan a los peores jugadores.
+     * @throws NotFoundException Si no se encuentran jugadores en la base de datos.
+     */
+    public List<JugadorDtoJpa> peoresJugadores(){
+        List<JugadorEntityJpa> todosLosJugadores = jugadorRepositoryJpa.findAll();
+        List<JugadorDtoJpa> peoresJugadores = new ArrayList<>();
+        int porcentajeMasBajo = 100; //Partimos con el porcentaje más alto
 
+        if (todosLosJugadores.isEmpty()) {
+          throw  new NotFoundException("No hay jugadores en la base de datos");
+        }
+
+        for (JugadorEntityJpa jugador : todosLosJugadores) {
+            int miPorcentajeDeExito = jugador.getPorcentajeExito();
+
+            if(miPorcentajeDeExito < porcentajeMasBajo){
+                // Si encontramos un jugador con un porcentaje más bajo, limpiamos la lista anterior
+                peoresJugadores.clear();
+                porcentajeMasBajo = miPorcentajeDeExito;
+            }
+            if (miPorcentajeDeExito == porcentajeMasBajo) {
+                JugadorDtoJpa jugadorDto = pasarEntidadADto(jugador);
+                peoresJugadores.add(jugadorDto);
+            }
+        }
+        return peoresJugadores;
+    }
+
+    /**
+     * Obtiene una lista de los jugadores con el mismo porcentaje más alto de éxito.
+     *
+     * @return Una lista de objetos JugadorDtoJpa que representan a los jugadores con el mismo porcentaje más alto.
+     * @throws NotFoundException Si no se encuentran jugadores en la base de datos.
+     */
+    public List<JugadorDtoJpa> mejoresJugadores() throws NotFoundException {
+        List<JugadorEntityJpa> todosLosJugadores = jugadorRepositoryJpa.findAll();
+        List<JugadorDtoJpa> mejoresJugadores = new ArrayList<>();
+        int porcentajeMasAlto = 0; // Partimos con el porcentaje más bajo
+
+        if (todosLosJugadores.isEmpty()) {
+            throw new NotFoundException("No hay jugadores en la base de datos");
+        }
+
+        for (JugadorEntityJpa jugador : todosLosJugadores) {
+            int miPorcentajeDeExito = jugador.getPorcentajeExito();
+
+            if (miPorcentajeDeExito > porcentajeMasAlto) {
+                // Si encontramos un jugador con un porcentaje más alto, limpiamos la lista anterior
+                mejoresJugadores.clear();
+                porcentajeMasAlto = miPorcentajeDeExito;
+            }
+            if (miPorcentajeDeExito == porcentajeMasAlto) {
+                JugadorDtoJpa jugadorDto = pasarEntidadADto(jugador);
+                mejoresJugadores.add(jugadorDto);
+            }
+        }
+
+        return mejoresJugadores;
+    }
 
     //Metodos Privados----------------------------------------------------------------------->>
+
     /**
      * Calcula el porcentaje de éxito de un jugador basado en la cantidad de victorias en sus partidas.
      * <p>
@@ -157,23 +226,6 @@ public class JugadorServiceJpa {
                 .nombre(jugador.getNombre())
 
                 .porcentajeExito(jugador.getPorcentajeExito())
-                .build();
-    }
-
-   /**
-    * Convierte un DTO JugadorDtoJpa en una entidad JugadorEntityJpa.
-    * <p>
-    * Esta función realiza la conversión de un DTO JugadorDtoJpa a una entidad JugadorEntityJpa,
-    * asignando las propiedades relevantes del DTO a la entidad resultante.
-    *
-    *  @param jugadorDto El DTO JugadorDtoJpa que se va a convertir.
- * @return Una instancia de JugadorEntityJpa que representa el DTO convertido.
- */
-    private JugadorEntityJpa pasarDtoAEntidad(JugadorDtoJpa jugadorDto) {
-        return JugadorEntityJpa.builder()
-                .id(jugadorDto.getId())
-                .nombre(jugadorDto.getNombre())
-                .porcentajeExito(jugadorDto.getPorcentajeExito())
                 .build();
     }
 
