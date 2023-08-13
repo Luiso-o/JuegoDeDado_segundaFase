@@ -236,8 +236,13 @@ public class JugadorServiceJpa {
      * @return El nombre filtrado o "Anónimo" si la cadena es nula, vacía o contiene solo espacios en blanco.
      */
     private String filtraNombre(String cadena){
-        return  (cadena != null && !cadena.isBlank()) ? cadena : "Anónimo";
+         if (cadena != null && !cadena.isBlank()) {
+            // Eliminar espacios en blanco y números de la cadena
+            String nombreFiltrado = cadena.replaceAll("\\s+", "").replaceAll("\\d+", "");
+
+            return nombreFiltrado.isEmpty() ? "Anónimo" : nombreFiltrado;
+        } else {
+            return "Anónimo";
+        }
     }
-
-
 }
