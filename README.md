@@ -29,3 +29,14 @@ GET /players/ranking/winner: devuelve al jugador con peor porcentaje de éxito.
 
 - Fase 1
 Persistencia: utiliza como base de datos MySQL.
+
+-Interfaz del proyecto en swuagger
+![Swagger](https://github.com/Luiso-o/JuegoDeDados_SegundaFase/assets/128043647/63f467fb-d9c2-4251-b287-8c229dcbc36a)
+
+-MiDB_partidas
+![Mysql_Partidas](https://github.com/Luiso-o/JuegoDeDados_SegundaFase/assets/128043647/59e22b31-f8c9-47b2-8d2e-ae48ec58ed29)
+
+-MiDB_jugadores
+![Mysql_Jugadores](https://github.com/Luiso-o/JuegoDeDados_SegundaFase/assets/128043647/c483bd3c-0960-4935-8222-e78591078ed4)
+
+
