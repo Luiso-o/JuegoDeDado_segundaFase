@@ -1,5 +1,7 @@
 package Luis.JuegoDados.model.services;
 
+import Luis.JuegoDados.excepciones.EmptyPlayersListException;
+import Luis.JuegoDados.excepciones.PlayerNotFoundException;
 import Luis.JuegoDados.model.dto.JugadorDtoJpa;
 import Luis.JuegoDados.model.entity.JugadorEntityJpa;
 import Luis.JuegoDados.model.entity.PartidaEntityJpa;
@@ -13,6 +15,7 @@ import org.webjars.NotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -42,27 +45,20 @@ public class JugadorServiceJpa {
     }
 
     /**
-     * Busca y devuelve un jugador por su ID.
+     * Busca un jugador en la base de datos por su ID.
      *
      * @param id El ID del jugador que se desea buscar.
-     * @return El objeto JugadorEntityJpa que representa al jugador con el ID especificado.
-     * @throws NotFoundException Si la lista de jugadores está vacía.
-     * @throws RuntimeException Si no se encuentra un jugador con el ID proporcionado.
+     * @return El objeto JugadorEntityJpa correspondiente al ID proporcionado.
+     * @throws PlayerNotFoundException Si no se encuentra ningún jugador con el ID proporcionado.
      */
-    public JugadorEntityJpa buscarJugadorPorId(Long id){
+    public JugadorEntityJpa buscarJugadorPorId(Long id) {
+        Optional<JugadorEntityJpa> jugadorOptional = jugadorRepositoryJpa.findById(id);
 
-        try {
-            List<JugadorEntityJpa> misJugadores = jugadorRepositoryJpa.findAll();
-
-            if (misJugadores.isEmpty()) {
-                throw new NotFoundException("Lista de jugadores vacía");
-            }
-        } catch (NotFoundException e) {
-            throw new NotFoundException("Lista de jugadores vacía");
+        if (jugadorOptional.isPresent()) {
+            return jugadorOptional.get();
+        } else {
+            throw new PlayerNotFoundException(id);
         }
-
-     return jugadorRepositoryJpa.findById(id)
-             .orElseThrow(() -> new RuntimeException("No se encontró el jugador con el ID proporcionado."));
     }
 
     /**
@@ -100,7 +96,7 @@ public class JugadorServiceJpa {
     public List<JugadorDtoJpa> listaJugadores() {
         List<JugadorEntityJpa> jugadores = jugadorRepositoryJpa.findAll();
         if (jugadores.isEmpty()) {
-            throw new NotFoundException("Lista de Jugadores vacía");
+            throw new EmptyPlayersListException();
         }
         return jugadores.stream().map(this::pasarEntidadADto)
                 .collect(Collectors.toList());
@@ -133,7 +129,7 @@ public class JugadorServiceJpa {
         int porcentajeMasBajo = 100; //Partimos con el porcentaje más alto
 
         if (todosLosJugadores.isEmpty()) {
-          throw  new NotFoundException("No hay jugadores en la base de datos");
+          throw  new EmptyPlayersListException();
         }
 
         for (JugadorEntityJpa jugador : todosLosJugadores) {
@@ -164,7 +160,7 @@ public class JugadorServiceJpa {
         int porcentajeMasAlto = 0; // Partimos con el porcentaje más bajo
 
         if (todosLosJugadores.isEmpty()) {
-            throw new NotFoundException("No hay jugadores en la base de datos");
+            throw new EmptyPlayersListException();
         }
 
         for (JugadorEntityJpa jugador : todosLosJugadores) {
@@ -211,7 +207,6 @@ public class JugadorServiceJpa {
     }
 
     /**
-
      * Convierte una entidad JugadorEntityJpa en un DTO JugadorDtoJpa.
      * <p>
      * Esta función realiza la conversión de una entidad JugadorEntityJpa a un DTO JugadorDtoJpa,

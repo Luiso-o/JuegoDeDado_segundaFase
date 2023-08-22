@@ -1,5 +1,7 @@
 package Luis.JuegoDados.model.services;
 
+import Luis.JuegoDados.excepciones.GamesNotFoundInThisPlayerException;
+import Luis.JuegoDados.excepciones.ItemsNotFoundException;
 import Luis.JuegoDados.model.dto.PartidaDtoJpa;
 import Luis.JuegoDados.model.entity.JugadorEntityJpa;
 import Luis.JuegoDados.model.entity.PartidaEntityJpa;
@@ -22,6 +24,7 @@ public class PartidaServiceJpa {
     private PartidaRepositoryJpa partidaRepositoryJpa;
 
     private JugadorRepositoryJpa jugadorRepositoryJpa;
+
 
     /**
      * Crea una nueva partida para un jugador.
@@ -50,7 +53,7 @@ public class PartidaServiceJpa {
     public void eliminarPartidasDeJugador(JugadorEntityJpa jugador){
         List<PartidaEntityJpa> misPartidas = partidaRepositoryJpa.findByJugador(jugador);
         if (misPartidas.isEmpty()) {
-            throw new RuntimeException("El jugador no tiene partidas que eliminar");
+            throw new ItemsNotFoundException();
         }
         misPartidas.forEach(partida -> partidaRepositoryJpa.delete(partida));
         jugadorRepositoryJpa.save(jugador);
@@ -66,7 +69,7 @@ public class PartidaServiceJpa {
     public List<PartidaDtoJpa> encuentraPartidasJugador(JugadorEntityJpa jugador){
         List<PartidaEntityJpa> misPartidas = partidaRepositoryJpa.findByJugador(jugador);
         if(misPartidas.isEmpty()){
-            throw new NotFoundException("No se le encontraron partidas a este jugador");
+            throw new GamesNotFoundInThisPlayerException();
         }
 
         return misPartidas.stream()
@@ -91,13 +94,12 @@ public class PartidaServiceJpa {
     }
 
     /**
-     * Genera un número aleatorio entre 1 y 12, simulando el resultado de tirar dos dados.
+     * Simula el lanzamiento de dos dados y devuelve un número aleatorio entre 2 y 12 (ambos inclusive).
      *
-     * @return El número aleatorio generado.
+     * @return Un número aleatorio entre 2 y 12.
      */
     private int tirarDados(){
-        return (int)Math.floor(Math.random() * 12) + 1;
+        return (int)Math.floor(Math.random() * 11) + 2;
     }
-
 
 }

@@ -1,5 +1,8 @@
 package Luis.JuegoDados.controller;
 
+import Luis.JuegoDados.excepciones.GamesNotFoundInThisPlayerException;
+import Luis.JuegoDados.excepciones.ItemsNotFoundException;
+import Luis.JuegoDados.excepciones.PlayerNotFoundException;
 import Luis.JuegoDados.model.dto.JugadorDtoJpa;
 import Luis.JuegoDados.model.dto.PartidaDtoJpa;
 import Luis.JuegoDados.model.entity.JugadorEntityJpa;
@@ -24,7 +27,7 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @Builder
-@RequestMapping("Jugador")
+@RequestMapping("jugador")
 @OpenAPIDefinition(info = @Info(title = "Juego de Dados API",version = "6.0",description = "API para gestionar jugadores y partidas en el juego de dados"))
 public class ControllerJpa {
 
@@ -58,9 +61,13 @@ public class ControllerJpa {
              @RequestParam
              @Pattern(regexp = "^[a-zA-Z]*$",message = "El nombre debe contener solo letras") String nombre)
     {
-        JugadorEntityJpa jugadorEntidad = jugadorServiceJpa.buscarJugadorPorId(id);
-        JugadorDtoJpa jugador = jugadorServiceJpa.actualizarNombreJugador(jugadorEntidad, nombre);
-        return ResponseEntity.ok(jugador);
+        try {
+            JugadorEntityJpa jugadorEntidad = jugadorServiceJpa.buscarJugadorPorId(id);
+            JugadorDtoJpa jugador = jugadorServiceJpa.actualizarNombreJugador(jugadorEntidad, nombre);
+            return ResponseEntity.ok(jugador);
+        } catch (PlayerNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
   @Operation(summary = "Juega una partida", description = "Lanza los dados y devuelve los resultados de la partida")
@@ -68,10 +75,14 @@ public class ControllerJpa {
   @ApiResponse(responseCode = "500", description = "Error interno, Revise response status 500")
     @PostMapping("/{id}/juego")
     public ResponseEntity<PartidaDtoJpa> tirarDados(@PathVariable long id){
-        JugadorEntityJpa jugador = jugadorServiceJpa.buscarJugadorPorId(id);
-       PartidaDtoJpa nuevaPartida = partidaServiceJpa.crearPartida(jugador);
-        jugadorServiceJpa.actualizarPorcentajeExitoJugador(jugador);
-       return ResponseEntity.ok(nuevaPartida);
+        try{
+            JugadorEntityJpa jugador = jugadorServiceJpa.buscarJugadorPorId(id);
+            PartidaDtoJpa nuevaPartida = partidaServiceJpa.crearPartida(jugador);
+            jugadorServiceJpa.actualizarPorcentajeExitoJugador(jugador);
+            return ResponseEntity.ok(nuevaPartida);
+        }catch (PlayerNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
       @Operation(summary = "Elimina las partidas de un Jugador", description = "recibe el id de un jugador y elimina sus partidas")
@@ -79,10 +90,14 @@ public class ControllerJpa {
       @ApiResponse(responseCode = "500", description = "Error interno, Revise response status 500")
     @DeleteMapping("/{id}/partidas")
     public ResponseEntity<Void> eliminarPartidasDeUnJugador(@PathVariable long id) {
-        JugadorEntityJpa jugador = jugadorServiceJpa.buscarJugadorPorId(id);
-        partidaServiceJpa.eliminarPartidasDeJugador(jugador);
-        jugadorServiceJpa.actualizarPorcentajeExitoJugador(jugador);
-        return ResponseEntity.noContent().build();
+        try{
+            JugadorEntityJpa jugador = jugadorServiceJpa.buscarJugadorPorId(id);
+            partidaServiceJpa.eliminarPartidasDeJugador(jugador);
+            jugadorServiceJpa.actualizarPorcentajeExitoJugador(jugador);
+            return ResponseEntity.noContent().build();
+        }catch (PlayerNotFoundException | ItemsNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(summary = "Ver lista de jugadores",description = "Devuelve la lista de los jugadores con su porcentaje éxito")
@@ -99,10 +114,25 @@ public class ControllerJpa {
     @ApiResponse(responseCode = "200", description = "Partidas encontradas con éxito")
     @ApiResponse(responseCode = "500", description = "Error interno, Revise response status 500")
     @GetMapping("/{id}/partidas")
-    public ResponseEntity<List<PartidaDtoJpa>> muestraPartidasJugador(@PathVariable long id){
-        JugadorEntityJpa jugador = jugadorServiceJpa.buscarJugadorPorId(id);
-        List<PartidaDtoJpa> partidas = partidaServiceJpa.encuentraPartidasJugador(jugador);
-        return ResponseEntity.ok(partidas);
+    public ResponseEntity<Map<String, Object>> muestraPartidasDeUnJugador(@PathVariable long id) {
+        try {
+            JugadorEntityJpa jugador = jugadorServiceJpa.buscarJugadorPorId(id);
+            List<PartidaDtoJpa> partidas = partidaServiceJpa.encuentraPartidasJugador(jugador);
+
+            Map<String, Object> respuesta = new HashMap<>();
+            if (partidas.isEmpty()) {
+                respuesta.put("mensaje", "No se encontraron partidas para el jugador " + jugador.getNombre());
+                return ResponseEntity.noContent().build();
+            } else {
+                respuesta.put("mensaje", "Lista de partidas del jugador " + jugador.getNombre());
+                respuesta.put("partidas", partidas);
+                return ResponseEntity.ok(respuesta);
+            }
+        } catch (PlayerNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (GamesNotFoundInThisPlayerException e) {
+            return ResponseEntity.noContent().build();
+        }
     }
 
    @Operation(summary = "Ranking de victorias",description = "Muestra el porcentaje total de victorias de todos los jugadores")
@@ -112,7 +142,7 @@ public class ControllerJpa {
     public ResponseEntity<Map<String, Object>> muestraPorcentajeVictorias(){
         int porcentaje = jugadorServiceJpa.calculaPorcentajeVictoriasGlobales();
         Map<String, Object> respuesta = new HashMap<>();
-        respuesta.put("Porcentaje de victorias globales ", porcentaje + "%");
+        respuesta.put("porcentaje de victorias globales", porcentaje + "%");
         return ResponseEntity.ok(respuesta);
     }
 
@@ -133,5 +163,4 @@ public class ControllerJpa {
         List<JugadorDtoJpa> peoresJugadores = jugadorServiceJpa.mejoresJugadores();
         return ResponseEntity.ok(peoresJugadores);
     }
-
 }

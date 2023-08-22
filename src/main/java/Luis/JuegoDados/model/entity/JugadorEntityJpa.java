@@ -27,6 +27,4 @@ public class JugadorEntityJpa {
     @Column(name = "porcentajeExito")
     private int porcentajeExito;
 
-
-
 }
