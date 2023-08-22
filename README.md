@@ -39,4 +39,20 @@ Persistencia: utiliza como base de datos MySQL.
 -MiDB_jugadores
 ![Mysql_Jugadores](https://github.com/Luiso-o/JuegoDeDados_SegundaFase/assets/128043647/c483bd3c-0960-4935-8222-e78591078ed4)
 
+IMPLEMENTACION DE UNIT TEST Y TEST DE INTEGRACION 
+
+-Services
+![Captura1](https://github.com/Luiso-o/JuegoDeDados_PrimeraFase/assets/128043647/81f82703-7472-4c4c-878d-9b6f325fb39d)
+
+-Repositories
+![Captura2](https://github.com/Luiso-o/JuegoDeDados_PrimeraFase/assets/128043647/00fd8051-0158-4d22-8653-81f8decd3467)
+
+-Entities
+![Captura3](https://github.com/Luiso-o/JuegoDeDados_PrimeraFase/assets/128043647/0af8e3a6-1c54-42ea-ab89-473857021215)
+
+-Departaments
+![Captura4](https://github.com/Luiso-o/JuegoDeDados_PrimeraFase/assets/128043647/960796fe-9dc6-4ad4-af9e-b8ddc2c1d478)
+
+-Controller
+![Captura5](https://github.com/Luiso-o/JuegoDeDados_PrimeraFase/assets/128043647/b5588a04-b58e-43e1-93d2-acd6863932cd)
 
