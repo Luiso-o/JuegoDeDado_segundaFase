@@ -1,9 +1,9 @@
 package Luis.JuegoDados.model.repository;
 
-import Luis.JuegoDados.entity.JugadorEntityJpa;
-import Luis.JuegoDados.entity.PartidaEntityJpa;
-import Luis.JuegoDados.repository.JugadorRepositoryJpa;
-import Luis.JuegoDados.repository.PartidaRepositoryJpa;
+import Luis.JuegoDados.entity.JugadorEntity;
+import Luis.JuegoDados.entity.PartidaEntity;
+import Luis.JuegoDados.repository.JugadorRepository;
+import Luis.JuegoDados.repository.PartidaRepository;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -26,19 +26,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class PartidaRepositoryJpaTest {
 
     @Autowired
-    private PartidaRepositoryJpa partidaRepository;
+    private PartidaRepository partidaRepository;
 
     @Autowired
-    private JugadorRepositoryJpa jugadorRepository;
+    private JugadorRepository jugadorRepository;
 
     @Test
     @Order(1)
     @DirtiesContext
     public void testGuardarPartida() {
-        JugadorEntityJpa jugador = new JugadorEntityJpa(1L, "Luis", 0);
+        JugadorEntity jugador = new JugadorEntity(1L, "Luis", 0);
         jugadorRepository.save(jugador);
 
-        PartidaEntityJpa partida = PartidaEntityJpa.builder()
+        PartidaEntity partida = PartidaEntity.builder()
                 .fecha(LocalDate.now())
                 .victorias(1)
                 .derrotas(0)
@@ -58,10 +58,10 @@ class PartidaRepositoryJpaTest {
     @Order(2)
     @DirtiesContext
     public void testFindByJugador() {
-        JugadorEntityJpa jugador = new JugadorEntityJpa(1L, "Luis", 0);
+        JugadorEntity jugador = new JugadorEntity(1L, "Luis", 0);
         jugadorRepository.save(jugador);
 
-        PartidaEntityJpa partida1 = PartidaEntityJpa.builder()
+        PartidaEntity partida1 = PartidaEntity.builder()
                 .fecha(LocalDate.now())
                 .victorias(2)
                 .derrotas(1)
@@ -69,7 +69,7 @@ class PartidaRepositoryJpaTest {
                 .build();
         partidaRepository.save(partida1);
 
-        PartidaEntityJpa partida2 = PartidaEntityJpa.builder()
+        PartidaEntity partida2 = PartidaEntity.builder()
                 .fecha(LocalDate.now())
                 .victorias(3)
                 .derrotas(2)
@@ -77,16 +77,16 @@ class PartidaRepositoryJpaTest {
                 .build();
         partidaRepository.save(partida2);
 
-        List<PartidaEntityJpa> partidasByJugador = partidaRepository.findByJugador(jugador);
+        List<PartidaEntity> partidasByJugador = partidaRepository.findByJugador(jugador);
 
         assertThat(partidasByJugador.size()).isEqualTo(2);
 
-        PartidaEntityJpa partidaRecuperada1 = partidasByJugador.get(0);
+        PartidaEntity partidaRecuperada1 = partidasByJugador.get(0);
         assertThat(partidaRecuperada1.getFecha()).isEqualTo(partida1.getFecha());
         assertThat(partidaRecuperada1.getVictorias()).isEqualTo(partida1.getVictorias());
         assertThat(partidaRecuperada1.getDerrotas()).isEqualTo(partida1.getDerrotas());
 
-        PartidaEntityJpa partidaRecuperada2 = partidasByJugador.get(1);
+        PartidaEntity partidaRecuperada2 = partidasByJugador.get(1);
         assertThat(partidaRecuperada2.getFecha()).isEqualTo(partida2.getFecha());
         assertThat(partidaRecuperada2.getVictorias()).isEqualTo(partida2.getVictorias());
         assertThat(partidaRecuperada2.getDerrotas()).isEqualTo(partida2.getDerrotas());
@@ -96,10 +96,10 @@ class PartidaRepositoryJpaTest {
     @Order(3)
     @DirtiesContext
     public void testEliminarPartida() {
-        JugadorEntityJpa jugador = new JugadorEntityJpa(1L, "Luis", 0);
+        JugadorEntity jugador = new JugadorEntity(1L, "Luis", 0);
         jugadorRepository.save(jugador);
 
-        PartidaEntityJpa partida = PartidaEntityJpa.builder()
+        PartidaEntity partida = PartidaEntity.builder()
                 .fecha(LocalDate.now())
                 .victorias(2)
                 .derrotas(1)
@@ -107,12 +107,12 @@ class PartidaRepositoryJpaTest {
                 .build();
         partidaRepository.save(partida);
 
-        List<PartidaEntityJpa> partidasBeforeDeletion = partidaRepository.findByJugador(jugador);
+        List<PartidaEntity> partidasBeforeDeletion = partidaRepository.findByJugador(jugador);
         assertThat(partidasBeforeDeletion.size()).isEqualTo(1);
 
         partidaRepository.delete(partida);
 
-        List<PartidaEntityJpa> partidasAfterDeletion = partidaRepository.findByJugador(jugador);
+        List<PartidaEntity> partidasAfterDeletion = partidaRepository.findByJugador(jugador);
         assertThat(partidasAfterDeletion.size()).isEqualTo(0);
     }
 

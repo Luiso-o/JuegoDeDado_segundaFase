@@ -1,8 +1,8 @@
 package Luis.JuegoDados.controller;
 
-import Luis.JuegoDados.repository.JugadorRepositoryJpa;
-import Luis.JuegoDados.repository.PartidaRepositoryJpa;
-import Luis.JuegoDados.services.JugadorServiceJpa;
+import Luis.JuegoDados.repository.JugadorRepository;
+import Luis.JuegoDados.repository.PartidaRepository;
+import Luis.JuegoDados.services.JugadorService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ class ControllerJpaTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private JugadorRepositoryJpa jugadorRepositoryJpa;
+    private JugadorRepository jugadorRepositoryJpa;
     @Autowired
-    private PartidaRepositoryJpa partidaRepositoryJpa;
+    private PartidaRepository partidaRepositoryJpa;
     @Autowired
-    private JugadorServiceJpa jugadorServiceJpa;
+    private JugadorService jugadorServiceJpa;
 
     @Test
     public void cuandoSeCreaUnUsuario_ElResultadoSeraOk() throws Exception {

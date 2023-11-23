@@ -2,10 +2,7 @@ package Luis.JuegoDados.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -16,24 +13,24 @@ import java.time.LocalDate;
 @Builder
 @Schema(description = "Información de una partida")
 @Table(name = "Partidas")
-public class PartidaEntityJpa {
+public class PartidaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true)
+    @Column(name="id_partida" ,unique = true)
     private Long id;
 
-    @JoinColumn(name = "Fecha partida")
+    @Column(name = "Fecha partida")
     private LocalDate fecha;
 
-    @JoinColumn(name = "Victorias")
+    @Column(name = "Victorias")
     private int victorias;
 
-    @JoinColumn(name = "Derrotas")
+    @Column(name = "Derrotas")
     private int derrotas;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "jugador_id")
-    private JugadorEntityJpa jugador;
+    private JugadorEntity jugador;
 
 }

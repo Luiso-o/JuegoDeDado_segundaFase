@@ -1,6 +1,6 @@
 package Luis.JuegoDados.model.entity;
 
-import Luis.JuegoDados.entity.JugadorEntityJpa;
+import Luis.JuegoDados.entity.JugadorEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,7 +9,7 @@ class JugadorEntityJpaTest {
 
     @Test
     void testCrearJugadorEntity() {
-        JugadorEntityJpa jugador = new JugadorEntityJpa(1L, "Luis", 0);
+        JugadorEntity jugador = new JugadorEntity(1L, "Luis", 0);
 
         assertEquals(1L, jugador.getId());
         assertEquals("Luis", jugador.getNombre());
@@ -18,7 +18,7 @@ class JugadorEntityJpaTest {
 
     @Test
     void testCrearJugadorEntityConBuilder() {
-        JugadorEntityJpa jugador = JugadorEntityJpa.builder()
+        JugadorEntity jugador = JugadorEntity.builder()
                 .id(2L)
                 .nombre("Ana")
                 .porcentajeExito(75)

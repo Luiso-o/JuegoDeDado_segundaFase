@@ -1,6 +1,6 @@
 package Luis.JuegoDados.model.dto;
 
-import Luis.JuegoDados.dto.PartidaDtoJpa;
+import Luis.JuegoDados.dto.PartidaDto;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -11,7 +11,7 @@ class PartidaDtoJpaTest {
 
     @Test
     void testCrearPartidaDto() {
-        PartidaDtoJpa partidaDto = PartidaDtoJpa.builder()
+        PartidaDto partidaDto = PartidaDto.builder()
                 .id(1L)
                 .fecha(LocalDate.of(2023, 8, 11))
                 .mensaje("Ganaste :D")
@@ -24,7 +24,7 @@ class PartidaDtoJpaTest {
 
     @Test
     void testCrearPartidaDtoConBuilder() {
-        PartidaDtoJpa partidaDto = PartidaDtoJpa.builder()
+        PartidaDto partidaDto = PartidaDto.builder()
                 .id(2L)
                 .fecha(LocalDate.of(2023, 8, 15))
                 .mensaje("Perdiste :v")
