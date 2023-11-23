@@ -1,4 +1,4 @@
-package Luis.JuegoDados.model.dto;
+package Luis.JuegoDados.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,6 @@
 package Luis.JuegoDados.model.dto;
 
+import Luis.JuegoDados.dto.PartidaDtoJpa;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

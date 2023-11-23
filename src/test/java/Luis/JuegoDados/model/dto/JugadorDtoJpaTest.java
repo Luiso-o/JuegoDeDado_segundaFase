@@ -1,5 +1,6 @@
 package Luis.JuegoDados.model.dto;
 
+import Luis.JuegoDados.dto.JugadorDtoJpa;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

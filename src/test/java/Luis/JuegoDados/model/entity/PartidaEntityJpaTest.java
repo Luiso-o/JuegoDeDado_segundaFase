@@ -1,5 +1,7 @@
 package Luis.JuegoDados.model.entity;
 
+import Luis.JuegoDados.entity.JugadorEntityJpa;
+import Luis.JuegoDados.entity.PartidaEntityJpa;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;

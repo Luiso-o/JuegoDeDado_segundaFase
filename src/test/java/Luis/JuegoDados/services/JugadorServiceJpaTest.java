@@ -1,11 +1,11 @@
-package Luis.JuegoDados.model.services;
+package Luis.JuegoDados.services;
 
 import Luis.JuegoDados.excepciones.EmptyPlayersListException;
 import Luis.JuegoDados.excepciones.PlayerNotFoundException;
-import Luis.JuegoDados.model.dto.JugadorDtoJpa;
-import Luis.JuegoDados.model.entity.JugadorEntityJpa;
-import Luis.JuegoDados.model.repository.JugadorRepositoryJpa;
-import Luis.JuegoDados.model.repository.PartidaRepositoryJpa;
+import Luis.JuegoDados.dto.JugadorDtoJpa;
+import Luis.JuegoDados.entity.JugadorEntityJpa;
+import Luis.JuegoDados.repository.JugadorRepositoryJpa;
+import Luis.JuegoDados.repository.PartidaRepositoryJpa;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
