@@ -1,4 +1,4 @@
-package Luis.JuegoDados.model.entity;
+package Luis.JuegoDados.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;

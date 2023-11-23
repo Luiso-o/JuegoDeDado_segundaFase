@@ -1,8 +1,8 @@
 package Luis.JuegoDados.controller;
 
-import Luis.JuegoDados.model.repository.JugadorRepositoryJpa;
-import Luis.JuegoDados.model.repository.PartidaRepositoryJpa;
-import Luis.JuegoDados.model.services.JugadorServiceJpa;
+import Luis.JuegoDados.repository.JugadorRepositoryJpa;
+import Luis.JuegoDados.repository.PartidaRepositoryJpa;
+import Luis.JuegoDados.services.JugadorServiceJpa;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
-package Luis.JuegoDados.model.repository;
+package Luis.JuegoDados.repository;
 
-import Luis.JuegoDados.model.entity.JugadorEntityJpa;
+import Luis.JuegoDados.entity.JugadorEntityJpa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

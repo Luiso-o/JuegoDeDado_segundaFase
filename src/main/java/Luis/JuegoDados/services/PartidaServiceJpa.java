@@ -1,12 +1,12 @@
-package Luis.JuegoDados.model.services;
+package Luis.JuegoDados.services;
 
 import Luis.JuegoDados.excepciones.GamesNotFoundInThisPlayerException;
 import Luis.JuegoDados.excepciones.ItemsNotFoundException;
-import Luis.JuegoDados.model.dto.PartidaDtoJpa;
-import Luis.JuegoDados.model.entity.JugadorEntityJpa;
-import Luis.JuegoDados.model.entity.PartidaEntityJpa;
-import Luis.JuegoDados.model.repository.JugadorRepositoryJpa;
-import Luis.JuegoDados.model.repository.PartidaRepositoryJpa;
+import Luis.JuegoDados.dto.PartidaDtoJpa;
+import Luis.JuegoDados.entity.JugadorEntityJpa;
+import Luis.JuegoDados.entity.PartidaEntityJpa;
+import Luis.JuegoDados.repository.JugadorRepositoryJpa;
+import Luis.JuegoDados.repository.PartidaRepositoryJpa;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,7 @@
 package Luis.JuegoDados.model.repository;
 
-import Luis.JuegoDados.model.entity.JugadorEntityJpa;
+import Luis.JuegoDados.entity.JugadorEntityJpa;
+import Luis.JuegoDados.repository.JugadorRepositoryJpa;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
