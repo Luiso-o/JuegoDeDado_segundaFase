@@ -1,11 +1,11 @@
-package Luis.JuegoDados.services;
+package Luis.JuegoDados.model.services;
 
 import Luis.JuegoDados.excepciones.GamesNotFoundInThisPlayerException;
 import Luis.JuegoDados.excepciones.ItemsNotFoundException;
-import Luis.JuegoDados.dto.PartidaDto;
-import Luis.JuegoDados.entity.JugadorEntity;
-import Luis.JuegoDados.entity.PartidaEntity;
-import Luis.JuegoDados.repository.PartidaRepository;
+import Luis.JuegoDados.model.dto.PartidaDtoJpa;
+import Luis.JuegoDados.model.entity.JugadorEntityJpa;
+import Luis.JuegoDados.model.entity.PartidaEntityJpa;
+import Luis.JuegoDados.model.repository.PartidaRepositoryJpa;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,20 +26,20 @@ import static org.mockito.Mockito.*;
 class PartidaServiceJpaTest {
 
     @InjectMocks
-    private PartidaService partidaServiceJpa;
+    private PartidaServiceJpa partidaServiceJpa;
     @Mock
-    private PartidaRepository partidaRepositoryJpa;
+    private PartidaRepositoryJpa partidaRepositoryJpa;
 
     @Test
     @DisplayName("Crear partida exitosamente")
     void testCrearPartida() {
-        JugadorEntity jugador = new JugadorEntity(1L, "Jugador1", 50);
+        JugadorEntityJpa jugador = new JugadorEntityJpa(1L, "Jugador1", 50);
 
         // Simular el comportamiento del repositorio
-        when(partidaRepositoryJpa.save(any(PartidaEntity.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
+        when(partidaRepositoryJpa.save(any(PartidaEntityJpa.class))).thenAnswer(invocation -> invocation.getArguments()[0]);
 
         // Llamada al método a probar
-        PartidaDto partidaDto = partidaServiceJpa.crearPartida(jugador);
+        PartidaDtoJpa partidaDto = partidaServiceJpa.crearPartida(jugador);
 
         // Verificaciones
         assertNotNull(partidaDto);
@@ -47,14 +47,14 @@ class PartidaServiceJpaTest {
         assertTrue(partidaDto.getMensaje().equals("Ganaste :D") || partidaDto.getMensaje().equals("Perdiste :V"));
 
         // Verificar que se llamó al método save en el repositorio
-        verify(partidaRepositoryJpa).save(any(PartidaEntity.class));
+        verify(partidaRepositoryJpa).save(any(PartidaEntityJpa.class));
     }
 
     @Test
     @DisplayName("Test para tirarDados (private Method)")
     void testTirarDados_MetodoPrivado() throws Exception {
         // Llamada al método privado usando reflexión
-        Method method = PartidaService.class.getDeclaredMethod("tirarDados");
+        Method method = PartidaServiceJpa.class.getDeclaredMethod("tirarDados");
         method.setAccessible(true);
         int resultado = (int) method.invoke(partidaServiceJpa);
 
@@ -66,14 +66,14 @@ class PartidaServiceJpaTest {
     @DisplayName("Test para convertir PartidaEntity a PartidaDto (private Method)")
     public void testPasarEntityADto_MetodoPrivado() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         // Crear una instancia de PartidaEntityJpa para simular entrada
-        JugadorEntity jugadorEntityJpa = new JugadorEntity(1L,"Juan",36);
-        PartidaEntity partidaEntity = new PartidaEntity(1L,LocalDate.now(),1,0,jugadorEntityJpa);
+        JugadorEntityJpa jugadorEntityJpa = new JugadorEntityJpa(1L,"Juan",36);
+        PartidaEntityJpa partidaEntity = new PartidaEntityJpa(1L,LocalDate.now(),1,0,jugadorEntityJpa);
 
         // Llamar al método privado usando reflexión
-        Method method = PartidaService.class.getDeclaredMethod("pasarEntityADto", PartidaEntity.class);
+        Method method = PartidaServiceJpa.class.getDeclaredMethod("pasarEntityADto", PartidaEntityJpa.class);
         method.setAccessible(true);
 
-        PartidaDto result = (PartidaDto) method.invoke(partidaServiceJpa, partidaEntity);
+        PartidaDtoJpa result = (PartidaDtoJpa) method.invoke(partidaServiceJpa, partidaEntity);
 
         // Verificar el resultado
         assertEquals(1L, result.getId());
@@ -84,7 +84,7 @@ class PartidaServiceJpaTest {
     @DisplayName("Test para eliminarPartidasDeJugador cuando no hay partidas")
     public void testEliminarPartidasDeJugadorSinPartidas() {
         // Crear un jugador sin partidas
-        JugadorEntity jugadorEntity = new JugadorEntity();
+        JugadorEntityJpa jugadorEntity = new JugadorEntityJpa();
         // Verificar si la excepción PartidasNoEncontradasException se lanza
         assertThrows(ItemsNotFoundException.class, () -> partidaServiceJpa.eliminarPartidasDeJugador(jugadorEntity));
     }
@@ -92,35 +92,35 @@ class PartidaServiceJpaTest {
     @Test
     void testEncuentraPartidasJugador_NoPartidas() {
         // Mock del repositorio de partidas
-        PartidaRepository partidaRepositoryJpa = mock(PartidaRepository.class);
+        PartidaRepositoryJpa partidaRepositoryJpa = mock(PartidaRepositoryJpa.class);
 
         // Crear una instancia del servicio con el repositorio mock
-        PartidaService partidaServiceJpa = new PartidaService(partidaRepositoryJpa, null);
+        PartidaServiceJpa partidaServiceJpa = new PartidaServiceJpa(partidaRepositoryJpa, null);
 
         // Configurar el repositorio para devolver una lista vacía de partidas
         when(partidaRepositoryJpa.findByJugador(any())).thenReturn(Collections.emptyList());
 
         // Verificar que se lance la excepción GamesNotFoundInThisPlayerException
-        assertThrows(GamesNotFoundInThisPlayerException.class, () -> partidaServiceJpa.encuentraPartidasJugador(new JugadorEntity()));
+        assertThrows(GamesNotFoundInThisPlayerException.class, () -> partidaServiceJpa.encuentraPartidasJugador(new JugadorEntityJpa()));
     }
 
     @Test
     void testEncuentraPartidasJugador_ConPartidas() {
         // Mock del repositorio de partidas
-        PartidaRepository partidaRepositoryJpa = mock(PartidaRepository.class);
+        PartidaRepositoryJpa partidaRepositoryJpa = mock(PartidaRepositoryJpa.class);
 
         // Crear una partida simulada
-        PartidaEntity partidaEntity = new PartidaEntity();
+        PartidaEntityJpa partidaEntity = new PartidaEntityJpa();
         partidaEntity.setId(1L);
 
         // Configurar el repositorio para devolver la lista de partidas simulada
         when(partidaRepositoryJpa.findByJugador(any())).thenReturn(Collections.singletonList(partidaEntity));
 
         // Crear una instancia del servicio con el repositorio mock
-        PartidaService partidaServiceJpa = new PartidaService(partidaRepositoryJpa, null);
+        PartidaServiceJpa partidaServiceJpa = new PartidaServiceJpa(partidaRepositoryJpa, null);
 
         // Llamar al método y verificar el resultado
-        List<PartidaDto> partidas = partidaServiceJpa.encuentraPartidasJugador(new JugadorEntity());
+        List<PartidaDtoJpa> partidas = partidaServiceJpa.encuentraPartidasJugador(new JugadorEntityJpa());
         assertFalse(partidas.isEmpty());
         assertEquals(partidaEntity.getId(), partidas.get(0).getId());
     }

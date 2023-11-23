@@ -1,7 +1,7 @@
 package Luis.JuegoDados.model.entity;
 
-import Luis.JuegoDados.entity.JugadorEntityJpa;
-import Luis.JuegoDados.entity.PartidaEntityJpa;
+import Luis.JuegoDados.entity.JugadorEntity;
+import Luis.JuegoDados.entity.PartidaEntity;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,13 +11,13 @@ class PartidaEntityJpaTest {
 
     @Test
     void testCrearPartidaEntity() {
-        JugadorEntityJpa jugador = JugadorEntityJpa.builder()
+        JugadorEntity jugador = JugadorEntity.builder()
                 .id(1L)
                 .nombre("Luis")
                 .porcentajeExito(50)
                 .build();
 
-        PartidaEntityJpa partida = PartidaEntityJpa.builder()
+        PartidaEntity partida = PartidaEntity.builder()
                 .id(1L)
                 .fecha(LocalDate.of(2023, 8, 1))
                 .victorias(3)
@@ -34,7 +34,7 @@ class PartidaEntityJpaTest {
 
     @Test
     void testCrearPartidaEntityConBuilder() {
-        PartidaEntityJpa partida = PartidaEntityJpa.builder()
+        PartidaEntity partida = PartidaEntity.builder()
                 .id(2L)
                 .fecha(LocalDate.of(2023, 8, 15))
                 .victorias(1)

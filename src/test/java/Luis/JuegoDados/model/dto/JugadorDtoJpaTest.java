@@ -1,6 +1,6 @@
 package Luis.JuegoDados.model.dto;
 
-import Luis.JuegoDados.dto.JugadorDtoJpa;
+import Luis.JuegoDados.dto.JugadorDto;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +8,7 @@ class JugadorDtoJpaTest {
 
     @Test
     void testCrearJugadorDto() {
-        JugadorDtoJpa jugadorDto = JugadorDtoJpa.builder()
+        JugadorDto jugadorDto = JugadorDto.builder()
                 .id(1L)
                 .nombre("Luis")
                 .porcentajeExito(50)
@@ -21,7 +21,7 @@ class JugadorDtoJpaTest {
 
     @Test
     void testCrearJugadorDtoConBuilder() {
-        JugadorDtoJpa jugadorDto = JugadorDtoJpa.builder()
+        JugadorDto jugadorDto = JugadorDto.builder()
                 .id(2L)
                 .nombre("Carlos")
                 .porcentajeExito(75)

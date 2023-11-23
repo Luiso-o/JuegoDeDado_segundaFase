@@ -1,16 +1,13 @@
 package Luis.JuegoDados.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JugadorDtoJpa {
+public class JugadorDto {
 
     @Schema(description = "Identificador único de jugador",example = "1")
     private Long id;

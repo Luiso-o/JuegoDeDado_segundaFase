@@ -1,11 +1,11 @@
-package Luis.JuegoDados.services;
+package Luis.JuegoDados.model.services;
 
 import Luis.JuegoDados.excepciones.EmptyPlayersListException;
 import Luis.JuegoDados.excepciones.PlayerNotFoundException;
-import Luis.JuegoDados.dto.JugadorDto;
-import Luis.JuegoDados.entity.JugadorEntity;
-import Luis.JuegoDados.repository.JugadorRepository;
-import Luis.JuegoDados.repository.PartidaRepository;
+import Luis.JuegoDados.model.dto.JugadorDtoJpa;
+import Luis.JuegoDados.model.entity.JugadorEntityJpa;
+import Luis.JuegoDados.model.repository.JugadorRepositoryJpa;
+import Luis.JuegoDados.model.repository.PartidaRepositoryJpa;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,28 +26,28 @@ import static org.mockito.Mockito.*;
 class JugadorServiceJpaTest {
 
     @InjectMocks
-    private JugadorService jugadorServiceJpa;
+    private JugadorServiceJpa jugadorServiceJpa;
     @Mock
-    private JugadorRepository jugadorRepositoryJpa;
+    private JugadorRepositoryJpa jugadorRepositoryJpa;
     @Mock
-    private PartidaRepository partidaRepositoryJpa;
+    private PartidaRepositoryJpa partidaRepositoryJpa;
 
     @Test
     @DisplayName("Test para el metodo crearJugador, esperamos obtener un objeto JugadorDtoJpa")
     void crearJugador() {
         // Configurar el comportamiento del mock para que retorne una entidad simulada al guardar
-        JugadorEntity jugadorCreadoSimulado = new JugadorEntity();
-        when(jugadorRepositoryJpa.save(any(JugadorEntity.class))).thenReturn(jugadorCreadoSimulado);
+        JugadorEntityJpa jugadorCreadoSimulado = new JugadorEntityJpa();
+        when(jugadorRepositoryJpa.save(any(JugadorEntityJpa.class))).thenReturn(jugadorCreadoSimulado);
 
         // Llamar al método bajo prueba
-        JugadorDto jugadorDto = jugadorServiceJpa.crearJugador("Sara");
+        JugadorDtoJpa jugadorDto = jugadorServiceJpa.crearJugador("Sara");
 
         // Realizar aserciones para verificar el resultado
         assertNotNull(jugadorDto);
         // Realizar más aserciones según lo esperado
 
         // Verificar que los métodos del mock se llamaron según lo esperado
-        verify(jugadorRepositoryJpa, times(1)).save(any(JugadorEntity.class));
+        verify(jugadorRepositoryJpa, times(1)).save(any(JugadorEntityJpa.class));
     }
 
     @Test
@@ -58,7 +58,7 @@ class JugadorServiceJpaTest {
         String nombreOriginal2 = "";
 
         // Llamada al método privado usando reflexión
-        Method method = JugadorService.class.getDeclaredMethod("filtraNombre", String.class);
+        Method method = JugadorServiceJpa.class.getDeclaredMethod("filtraNombre", String.class);
         method.setAccessible(true);
         String resultado1 = (String) method.invoke(jugadorServiceJpa, nombreOriginal1);
         String resultado2 = (String) method.invoke(jugadorServiceJpa, nombreOriginal2);
@@ -76,15 +76,15 @@ class JugadorServiceJpaTest {
         String nombre = "Nombre";
         int porcentajeExito = 75;
 
-        JugadorEntity jugadorEntity = new JugadorEntity();
+        JugadorEntityJpa jugadorEntity = new JugadorEntityJpa();
         jugadorEntity.setId(jugadorId);
         jugadorEntity.setNombre(nombre);
         jugadorEntity.setPorcentajeExito(porcentajeExito);
 
         // Llamada al método privado usando reflexión
-        Method method = JugadorService.class.getDeclaredMethod("pasarEntidadADto", JugadorEntity.class);
+        Method method = JugadorServiceJpa.class.getDeclaredMethod("pasarEntidadADto", JugadorEntityJpa.class);
         method.setAccessible(true);
-        JugadorDto resultado = (JugadorDto) method.invoke(jugadorServiceJpa, jugadorEntity);
+        JugadorDtoJpa resultado = (JugadorDtoJpa) method.invoke(jugadorServiceJpa, jugadorEntity);
 
         // Verificaciones
         assertEquals(jugadorId, resultado.getId());
@@ -96,12 +96,12 @@ class JugadorServiceJpaTest {
     @DisplayName("Test para buscarJugadorPorId cuando el jugador existe")
     void buscarJugadorPorId_CuandoJugadorExiste() {
         Long jugadorId = 1L;
-        JugadorEntity jugadorMock = new JugadorEntity();
+        JugadorEntityJpa jugadorMock = new JugadorEntityJpa();
         jugadorMock.setId(jugadorId);
 
         when(jugadorRepositoryJpa.findById(jugadorId)).thenReturn(Optional.of(jugadorMock));
 
-        JugadorEntity resultado = jugadorServiceJpa.buscarJugadorPorId(jugadorId);
+        JugadorEntityJpa resultado = jugadorServiceJpa.buscarJugadorPorId(jugadorId);
 
         assertNotNull(resultado);
         assertEquals(jugadorId, resultado.getId());
@@ -129,12 +129,12 @@ class JugadorServiceJpaTest {
         String nuevoNombre = "NuevoNombre";
 
         // Mock del jugador y configuración del repositorio
-        JugadorEntity jugadorMock = new JugadorEntity();
+        JugadorEntityJpa jugadorMock = new JugadorEntityJpa();
         jugadorMock.setId(jugadorId);
-        when(jugadorRepositoryJpa.save(any(JugadorEntity.class))).thenReturn(jugadorMock);
+        when(jugadorRepositoryJpa.save(any(JugadorEntityJpa.class))).thenReturn(jugadorMock);
 
         // Llamada al método bajo prueba
-        JugadorDto resultado = jugadorServiceJpa.actualizarNombreJugador(jugadorMock, nuevoNombre);
+        JugadorDtoJpa resultado = jugadorServiceJpa.actualizarNombreJugador(jugadorMock, nuevoNombre);
 
         // Verificaciones
         assertNotNull(resultado);
@@ -147,7 +147,7 @@ class JugadorServiceJpaTest {
     @DisplayName("Test para actualizarPorcentajeExitoJugador")
     void actualizarPorcentajeExitoJugador() {
         // Datos de prueba
-        JugadorEntity jugadorMock = new JugadorEntity();
+        JugadorEntityJpa jugadorMock = new JugadorEntityJpa();
 
         // Llamada al método bajo prueba
         jugadorServiceJpa.actualizarPorcentajeExitoJugador(jugadorMock);
@@ -160,13 +160,13 @@ class JugadorServiceJpaTest {
     @DisplayName("Test para calculaPorcentajeExitoDeUnJugador (Private Method)")
     void testCalculaPorcentajeExito_MetodoPrivado() throws Exception {
             // Datos de prueba
-            JugadorEntity jugadorMock = new JugadorEntity();
+            JugadorEntityJpa jugadorMock = new JugadorEntityJpa();
 
             // Simulamos que no hay partidas para el jugador
             when(partidaRepositoryJpa.findByJugador(jugadorMock)).thenReturn(List.of());
 
             // Simulamos la llamada al método privado usando reflexión
-            Method method = JugadorService.class.getDeclaredMethod("calculaPorcentajeExitoDeUnJugador", JugadorEntity.class);
+            Method method = JugadorServiceJpa.class.getDeclaredMethod("calculaPorcentajeExitoDeUnJugador", JugadorEntityJpa.class);
             method.setAccessible(true);
             int resultado = (int) method.invoke(jugadorServiceJpa, jugadorMock);
 
@@ -179,16 +179,16 @@ class JugadorServiceJpaTest {
     @DisplayName("Test para listaJugadores cuando la lista no está vacía")
     void testListaJugadores_NoVacia() {
         // Datos de prueba
-        List<JugadorEntity> jugadoresMock = Arrays.asList(
-                new JugadorEntity(1L, "Jugador1", 80),
-                new JugadorEntity(2L, "Jugador2", 65)
+        List<JugadorEntityJpa> jugadoresMock = Arrays.asList(
+                new JugadorEntityJpa(1L, "Jugador1", 80),
+                new JugadorEntityJpa(2L, "Jugador2", 65)
         );
 
         // Configurar el comportamiento del mock
         when(jugadorRepositoryJpa.findAll()).thenReturn(jugadoresMock);
 
         // Llamar al método bajo prueba
-        List<JugadorDto> resultado = jugadorServiceJpa.listaJugadores();
+        List<JugadorDtoJpa> resultado = jugadorServiceJpa.listaJugadores();
 
         // Verificaciones
         assertNotNull(resultado);
@@ -215,13 +215,13 @@ class JugadorServiceJpaTest {
     @DisplayName("Test para calculaPorcentajeVictoriasGlobales")
     void calculaPorcentajeVictoriasGlobales() {
         // Crear jugadores de prueba con diferentes porcentajes de éxito
-        JugadorEntity jugador1 = new JugadorEntity();
+        JugadorEntityJpa jugador1 = new JugadorEntityJpa();
         jugador1.setPorcentajeExito(50);
 
-        JugadorEntity jugador2 = new JugadorEntity();
+        JugadorEntityJpa jugador2 = new JugadorEntityJpa();
         jugador2.setPorcentajeExito(75);
 
-        JugadorEntity jugador3 = new JugadorEntity();
+        JugadorEntityJpa jugador3 = new JugadorEntityJpa();
         jugador3.setPorcentajeExito(0);
 
         // Simular que el repositorio retorna los jugadores de prueba
@@ -238,20 +238,20 @@ class JugadorServiceJpaTest {
     @DisplayName("Test para peoresJugadores")
     void peoresJugadores() {
         // Crear jugadores de prueba con diferentes porcentajes de éxito
-        JugadorEntity jugador1 = new JugadorEntity();
+        JugadorEntityJpa jugador1 = new JugadorEntityJpa();
         jugador1.setPorcentajeExito(50);
 
-        JugadorEntity jugador2 = new JugadorEntity();
+        JugadorEntityJpa jugador2 = new JugadorEntityJpa();
         jugador2.setPorcentajeExito(25);
 
-        JugadorEntity jugador3 = new JugadorEntity();
+        JugadorEntityJpa jugador3 = new JugadorEntityJpa();
         jugador3.setPorcentajeExito(75);
 
         // Simular que el repositorio retorna los jugadores de prueba
         when(jugadorRepositoryJpa.findAll()).thenReturn(Arrays.asList(jugador1, jugador2, jugador3));
 
         // Llamada al método bajo prueba
-        List<JugadorDto> peoresJugadores = jugadorServiceJpa.peoresJugadores();
+        List<JugadorDtoJpa> peoresJugadores = jugadorServiceJpa.peoresJugadores();
 
         // Verificar el resultado esperado
         assertEquals(1, peoresJugadores.size()); // Debería haber solo un peor jugador (jugador2)
@@ -262,20 +262,20 @@ class JugadorServiceJpaTest {
     @DisplayName("Test para mejoresJugadores")
     void mejoresJugadores() throws NotFoundException {
         // Crear jugadores de prueba con diferentes porcentajes de éxito
-        JugadorEntity jugador1 = new JugadorEntity();
+        JugadorEntityJpa jugador1 = new JugadorEntityJpa();
         jugador1.setPorcentajeExito(70);
 
-        JugadorEntity jugador2 = new JugadorEntity();
+        JugadorEntityJpa jugador2 = new JugadorEntityJpa();
         jugador2.setPorcentajeExito(90);
 
-        JugadorEntity jugador3 = new JugadorEntity();
+        JugadorEntityJpa jugador3 = new JugadorEntityJpa();
         jugador3.setPorcentajeExito(80);
 
         // Simular que el repositorio retorna los jugadores de prueba
         when(jugadorRepositoryJpa.findAll()).thenReturn(Arrays.asList(jugador1, jugador2, jugador3));
 
         // Llamada al método bajo prueba
-        List<JugadorDto> mejoresJugadores = jugadorServiceJpa.mejoresJugadores();
+        List<JugadorDtoJpa> mejoresJugadores = jugadorServiceJpa.mejoresJugadores();
 
         // Verificar el resultado esperado
         assertEquals(1, mejoresJugadores.size()); // Debería haber solo un mejor jugador (jugador2)

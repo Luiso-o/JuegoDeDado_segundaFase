@@ -9,19 +9,18 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(description = "Información de la entidad Jugador")
 @Table(name = "jugador")
-public class JugadorEntityJpa {
+public class JugadorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true)
     private long id;
 
-    @Column(name = "NombreJugador")
+    @Column(name = "nombre_jugador")
     private String nombre;
 
-    @Column(name = "porcentajeExito")
+    @Column(name = "porcentaje_exito %")
     private int porcentajeExito;
 
 }
