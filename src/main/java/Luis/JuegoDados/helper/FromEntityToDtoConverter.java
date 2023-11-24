@@ -2,6 +2,7 @@ package Luis.JuegoDados.helper;
 
 import Luis.JuegoDados.dto.JugadorDto;
 import Luis.JuegoDados.dto.PartidaDto;
+import Luis.JuegoDados.dto.PromedioJugadorDto;
 import Luis.JuegoDados.entity.JugadorEntity;
 import Luis.JuegoDados.entity.PartidaEntity;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,13 @@ public class FromEntityToDtoConverter {
                 .id(jugador.getId())
                 .nombre(jugador.getNombreJugador())
                 .porcentajeExito(jugador.getPorcentajeExito())
+                .build();
+    }
+
+    public PromedioJugadorDto convertirJugadorEntityAPromedioJugadorDto(JugadorEntity jugador) {
+        return PromedioJugadorDto.builder()
+                .nombre(jugador.getNombreJugador())
+                .porcentajeExito("Promedio de victorias " + jugador.getPorcentajeExito() + " %")
                 .build();
     }
 

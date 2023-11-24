@@ -2,6 +2,7 @@ package Luis.JuegoDados.controller;
 
 import Luis.JuegoDados.dto.JugadorDto;
 import Luis.JuegoDados.dto.PartidaDto;
+import Luis.JuegoDados.dto.PromedioJugadorDto;
 import Luis.JuegoDados.excepciones.PlayerNotSavedException;
 import Luis.JuegoDados.services.JugadorServiceImpl;
 import Luis.JuegoDados.services.PartidaServiceImpl;
@@ -18,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -88,8 +91,8 @@ public class JuegoDeDadosController {
             @ApiResponse(responseCode = "500", description = "Error interno, Revise response status 500")
     })
     @GetMapping()
-    public List<JugadorDto> obtenerListaJugadoresConPorcentajeMedioExito() {
-        List<JugadorDto> jugadores = jugadorService.findAllPLayers();
+    public List<PromedioJugadorDto> obtenerListaJugadoresConPorcentajeMedioExito() {
+        List<PromedioJugadorDto> jugadores = jugadorService.findAllPLayers();
         return ResponseEntity.ok(jugadores).getBody();
     }
 
@@ -104,34 +107,40 @@ public class JuegoDeDadosController {
       return ResponseEntity.status(HttpStatus.OK).body(myGames);
     }
 
- /*
    @Operation(summary = "Ranking de victorias",description = "Muestra el porcentaje total de victorias de todos los jugadores")
-    @ApiResponse(responseCode = "200", description = "Porcentaje realizado con éxito")
-   @ApiResponse(responseCode = "500", description = "Error interno, Revise response status 500")
+   @ApiResponses(value = {
+           @ApiResponse(responseCode = "200", description = "Ranking de victorias promediadas con éxito "),
+           @ApiResponse(responseCode = "500", description = "Error interno, Revise response status 500")
+   })
     @GetMapping("/ranking")
-    public ResponseEntity<Map<String, Object>> muestraPorcentajeVictorias(){
-        int porcentaje = jugadorServiceJpa.calculaPorcentajeVictoriasGlobales();
-        Map<String, Object> respuesta = new HashMap<>();
-        respuesta.put("porcentaje de victorias globales", porcentaje + "%");
-        return ResponseEntity.ok(respuesta);
+    public ResponseEntity<Map<String, Integer>> muestraPorcentajeVictorias(){
+        Map<String, Integer> response = new HashMap<>();
+        int promedioVictoriasGlobales = jugadorService.averagePlayerWins();
+        response.put("Promedio de victorias globales %: ", promedioVictoriasGlobales);
+       return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @Operation(summary = "Revisa peores jugadores",description = "Muestra los jugadores con el porcentaje más bajo de victorias")
-    @ApiResponse(responseCode = "200", description = "Lista encontrada con éxito")
-    @ApiResponse(responseCode = "500", description = "Error interno, Revise response status 500")
+
+    @Operation(summary = "Ver jugadores con el porcentaje más bajo",description = "Muestra los jugadores con el porcentaje más bajo de victorias")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ranking de victorias promediadas con éxito "),
+            @ApiResponse(responseCode = "500", description = "Error interno, Revise response status 500")
+    })
+
     @GetMapping("/ranking/peores")
-    public ResponseEntity<List<JugadorDto>> peoresPorcentajes() {
-           List<JugadorDto> peoresJugadores = jugadorServiceJpa.peoresJugadores();
+    public ResponseEntity<List<PromedioJugadorDto>> peoresPorcentajes() {
+           List<PromedioJugadorDto> peoresJugadores = jugadorService.lowestScores();
            return ResponseEntity.ok(peoresJugadores);
     }
 
-    @Operation(summary = "Revisa mejores jugadores",description = "Muestra los jugadores con el porcentaje más alto de victorias")
-    @ApiResponse(responseCode = "200", description = "Lista encontrada con éxito")
-    @ApiResponse(responseCode = "500", description = "Error interno, Revise response status 500")
+    @Operation(summary = "Ver jugadores con el porcentaje más alto",description = "Muestra los jugadores con el porcentaje más alto de victorias")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ranking de victorias promediadas con éxito "),
+            @ApiResponse(responseCode = "500", description = "Error interno, Revise response status 500")
+    })
     @GetMapping("/ranking/mejores")
-    public ResponseEntity<List<JugadorDto>> mejoresPorcentajes() {
-        List<JugadorDto> peoresJugadores = jugadorServiceJpa.mejoresJugadores();
+    public ResponseEntity<List<PromedioJugadorDto>> mejoresPorcentajes() {
+        List<PromedioJugadorDto> peoresJugadores = jugadorService.bestScores();
         return ResponseEntity.ok(peoresJugadores);
     }
-     */
 }
