@@ -4,7 +4,7 @@
     <img src="https://github.com/Luiso-o/JuegoDeDados_PrimeraFase/assets/128043647/b03823c6-f602-46aa-b645-1cec753b93f6" alt="Logo" width="80" height="80">
     </a>
 </div>
-<h3 align="center" style = "color: blue" >App Juego De Dados</h3>
+<h3 align="center" style = "color: blue;" >App Juego De Dados</h3>
 
 ## Interfaz del proyecto en swagger
 ![Swagger](https://github.com/Luiso-o/JuegoDeDados_SegundaFase/assets/128043647/63f467fb-d9c2-4251-b287-8c229dcbc36a)
