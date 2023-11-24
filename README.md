@@ -1,17 +1,7 @@
 <!-- PROJECT LOGO -->
-<br />
 <div align="center">
-  <a href="https://github.com/Luiso-o/JuegoDeDados_PrimeraFase">
-    <img src= href="https://www.flaticon.es/iconos-gratis/dado" title="dado iconos">Dado iconos creados por Freepik - Flaticon" alt="Logo" width="80" height="80">
-  </a>
-
+  <a href="https://www.flaticon.es/iconos-gratis/dado" title="dado iconos">Dado iconos creados por Freepik - Flaticon</a>
 <h3 align="center">JuegoDeDados</h3>
-
-  <p align="center">
-    Juego de dados
-    <br />
-    <br />
-    <br />
 </div>
 
 ## Interfaz del proyecto en swagger
