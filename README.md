@@ -1,6 +1,6 @@
 <!-- PROJECT LOGO -->
 <div align="center">
-  ![dado](https://github.com/Luiso-o/JuegoDeDados_PrimeraFase/assets/128043647/04f80a37-fba8-4011-afa5-2166bd761acc)
+    <img src="assets/128043647/adeecbda-dcf5-4065-b22d-757045e191aa" alt="Logo" width="80" height="80">
 <h3 align="center">JuegoDeDados</h3>
 </div>
 
