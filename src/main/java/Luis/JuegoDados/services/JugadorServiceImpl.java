@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +31,7 @@ public class JugadorServiceImpl implements JugadorService{
         try{
             log.info("Iniciando el método createNewPlayer con nombre: {}", nombre);
             JugadorEntity nuevo = JugadorEntity.builder()
-                    .nombre(nombre)
+                    .nombreJugador(nombre)
                     .porcentajeExito(0)
                     .build();
 
@@ -56,8 +54,8 @@ public class JugadorServiceImpl implements JugadorService{
         JugadorEntity updatedPLayer = findPLayerById(id);
 
         log.info("jugador encontrado en la base de datos");
-        String oldName = updatedPLayer.getNombre();
-        updatedPLayer.setNombre(nombre);
+        String oldName = updatedPLayer.getNombreJugador();
+        updatedPLayer.setNombreJugador(nombre);
         jugadorRepository.save(updatedPLayer);
         log.info("Nombre de jugador actualizado correctamente: nombre antiguo: " + oldName + "/nuevo nombre: " + nombre);
 

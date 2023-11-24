@@ -20,13 +20,13 @@ public class PartidaEntity {
     @Column(name="id_partida" ,unique = true)
     private Long id;
 
-    @Column(name = "Fecha partida")
+    @Column(name = "fecha_partida")
     private LocalDate fecha;
 
-    @Column(name = "Victorias")
+    @Column(name = "victorias")
     private int victorias;
 
-    @Column(name = "Derrotas")
+    @Column(name = "derrotas")
     private int derrotas;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

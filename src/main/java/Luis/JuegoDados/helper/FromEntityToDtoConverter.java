@@ -12,7 +12,7 @@ public class FromEntityToDtoConverter {
     public JugadorDto convertirJugadorEntityADto(JugadorEntity jugador) {
         return JugadorDto.builder()
                 .id(jugador.getId())
-                .nombre(jugador.getNombre())
+                .nombre(jugador.getNombreJugador())
                 .porcentajeExito(jugador.getPorcentajeExito())
                 .build();
     }
