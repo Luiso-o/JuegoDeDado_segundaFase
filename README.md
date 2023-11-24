@@ -1,3 +1,8 @@
+  <p align="left">
+   <img src="https://img.shields.io/badge/STATUS-EN%20DESAROLLO-green">
+   </p>
+
+</br>
 <!-- PROJECT LOGO -->
 <div align="center">
     <a href="https://github.com/Luiso-o/JuegoDeDados_PrimeraFase">
