@@ -11,6 +11,19 @@
 </div>
 <h3 align="center" >App Juego De Dados</h3>
 
+## Opciones para descargar el proyecto:
+-  Puede descargar el proyecto en formato Zip.
+-  clonando desde la consola de comandos de git con el comando git clone https://github.com/Luiso-o/ApiRestCrud-SkinsVideojuego.git
+
+## Importante antes de usar la API:
+
+## Versiones necesarias:
+- Maven 3.9.3 
+- JDK 17.0.1
+- Kotlin 1.8.10
+- SpringFramework.boot 3.1.4
+
+
 ## Interfaz del proyecto en swagger
 ![Swagger](https://github.com/Luiso-o/JuegoDeDados_SegundaFase/assets/128043647/63f467fb-d9c2-4251-b287-8c229dcbc36a)
 
