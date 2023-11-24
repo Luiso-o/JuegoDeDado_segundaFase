@@ -1,6 +1,6 @@
 <!-- PROJECT LOGO -->
 <div align="center">
-  <a href="https://www.flaticon.es/iconos-gratis/dado" title="dado iconos">Dado iconos creados por Freepik - Flaticon</a>
+  ![dado](https://github.com/Luiso-o/JuegoDeDados_PrimeraFase/assets/128043647/04f80a37-fba8-4011-afa5-2166bd761acc)
 <h3 align="center">JuegoDeDados</h3>
 </div>
 
@@ -15,4 +15,4 @@
 
 ## Testing
 
-
+<p>Enlace a Flaticon <a href="https://www.flaticon.es/iconos-gratis/dado" title="dado iconos"> Dado iconos creados por Freepik - Flaticon</a></p>
