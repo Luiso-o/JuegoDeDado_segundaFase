@@ -1,14 +1,8 @@
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/Luiso-o/JuegoDeDados_PrimeraFase">
-    <img src="https://www.flaticon.es/icono-gratis/dado_6160914?term=dados&page=1&position=16&origin=search&related_id=6160914" alt="Logo" width="80" height="80">
+    <img src= href="https://www.flaticon.es/iconos-gratis/dado" title="dado iconos">Dado iconos creados por Freepik - Flaticon" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">JuegoDeDados</h3>
