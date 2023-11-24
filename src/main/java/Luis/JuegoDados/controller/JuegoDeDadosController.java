@@ -25,11 +25,10 @@ import java.util.List;
 @Builder
 @RequestMapping("jugador")
 @OpenAPIDefinition(info = @Info(title = "Juego de Dados API",version = "6.0",description = "API para gestionar jugadores y partidas en el juego de dados"))
-public class DadosController {
+public class JuegoDeDadosController {
 
     @Autowired
     private final JugadorServiceImpl jugadorService;
-
     @Autowired
     private final PartidaServiceImpl partidaService;
 

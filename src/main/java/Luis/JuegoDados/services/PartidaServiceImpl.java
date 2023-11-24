@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -120,7 +119,7 @@ public class PartidaServiceImpl implements PartidaService{
     }
 
     private int actualizarPorcentajeDeExitoJugador(JugadorEntity player){
-        log.info("Buscando lista de partidas del jugador " + player.getNombre());
+        log.info("Buscando lista de partidas del jugador " + player.getNombreJugador());
         List<PartidaEntity> games = partidaRepository.findByJugador(player);
         int total = games.size();
         int victorias = games.stream().mapToInt(PartidaEntity::getVictorias).sum();

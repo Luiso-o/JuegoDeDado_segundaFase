@@ -1,14 +1,13 @@
 package Luis.JuegoDados.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
 @Table(name = "jugador")
 public class JugadorEntity {
 
@@ -18,9 +17,9 @@ public class JugadorEntity {
     private long id;
 
     @Column(name = "nombre_jugador")
-    private String nombre;
+    private String nombreJugador;
 
-    @Column(name = "porcentaje_exito %")
+    @Column(name = "porcentaje_exito_%")
     private int porcentajeExito;
 
 }
