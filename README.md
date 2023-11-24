@@ -1,6 +1,6 @@
 <!-- PROJECT LOGO -->
 <div align="center">
-    <img src="https://www.flaticon.es/iconos-gratis/dado" alt="Logo" width="80" height="80">
+    <img src="https://github.com/Luiso-o/JuegoDeDados_PrimeraFase/assets/128043647/b03823c6-f602-46aa-b645-1cec753b93f6" alt="Logo" width="80" height="80">
 <h3 align="center">App Juego De Dados</h3>
 </div>
 
