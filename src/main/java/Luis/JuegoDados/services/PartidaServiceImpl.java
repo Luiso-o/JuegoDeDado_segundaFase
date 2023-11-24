@@ -83,20 +83,6 @@ public class PartidaServiceImpl implements PartidaService{
                 .collect(Collectors.toList());
     }
 
-    /*
-    public List<PartidaDto> encuentraPartidasJugador(JugadorEntity jugador){
-        List<PartidaEntity> misPartidas = partidaRepositoryJpa.findByJugador(jugador);
-        if(misPartidas.isEmpty()){
-            throw new GamesNotFoundInThisPlayerException();
-        }
-
-        return misPartidas.stream()
-                .map(this::)
-                .collect(Collectors.toList());
-
-    }
-    */
-
     //Metodos privados ---------------------------------------------------------------->>
     private int tirarDados(){
         return (int)Math.floor(Math.random() * 11) + 2;

@@ -1,6 +1,7 @@
 package Luis.JuegoDados.services;
 
 import Luis.JuegoDados.dto.JugadorDto;
+import Luis.JuegoDados.dto.PromedioJugadorDto;
 import Luis.JuegoDados.entity.JugadorEntity;
 import Luis.JuegoDados.excepciones.EmptyPlayersListException;
 import Luis.JuegoDados.excepciones.PlayerNotFoundException;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,75 +76,94 @@ public class JugadorServiceImpl implements JugadorService{
     }
 
     @Override
-    public List<JugadorDto> findAllPLayers() {
-        try {
-            List<JugadorEntity> jugadores = jugadorRepository.findAll();
-
-            return jugadores.stream()
-                    .map(jugador -> converter.convertirJugadorEntityADto(jugador))
+    public List<PromedioJugadorDto> findAllPLayers() {
+        try{
+            List<JugadorEntity> players = jugadorRepository.findAll();
+            return players.stream()
+                    .map(jugador -> converter.convertirJugadorEntityAPromedioJugadorDto(jugador))
                     .collect(Collectors.toList());
-
-        } catch (Exception e) {
+        }catch (Exception e){
             log.error("Error al recuperar la lista de jugadores: " + e.getMessage());
             throw new EmptyPlayersListException("Error al momento de recuperar la lista de jugadores " + e);
         }
     }
 
-    /*
+    @Override
+    public int averagePlayerWins() {
+        try{
+            List<JugadorEntity> players = jugadorRepository.findAll();
+            int totalJugadores = players.size();
+            int promedioVictoriasGlobales = 0;
 
-    public List<JugadorDto> listaJugadores() {
-        List<JugadorEntity> jugadores = jugadorRepository.findAll();
-        if (jugadores.isEmpty()) {
-            throw new EmptyPlayersListException();
+            if(totalJugadores == 0){
+                return 0;
+            }
+
+            for (JugadorEntity player : players) {
+                promedioVictoriasGlobales += player.getPorcentajeExito();
+            }
+
+            return promedioVictoriasGlobales / totalJugadores;
+
+        }catch (Exception e){
+            log.error("Error al recuperar la lista de jugadores: " + e.getMessage());
+            throw new EmptyPlayersListException("Error al momento de recuperar la lista de jugadores " + e);
         }
-        return jugadores.stream().map(this::pasarEntidadADto)
-                .collect(Collectors.toList());
     }
 
-    public int calculaPorcentajeVictoriasGlobales(){
-        List<JugadorEntity> jugadores = jugadorRepository.findAll();
-        if(jugadores.isEmpty()){return 0;}
-        int porcentajeExitoGlobal = jugadores.stream()
-                .mapToInt(JugadorEntity::getPorcentajeExito)
-                .sum();
-        if(porcentajeExitoGlobal == 0){return 0;}
-        return porcentajeExitoGlobal/jugadores.size();
-    }
-
-    public List<JugadorDto> peoresJugadores(){
+    @Override
+    public List<PromedioJugadorDto> lowestScores() {
         List<JugadorEntity> todosLosJugadores = jugadorRepository.findAll();
-        List<JugadorDto> peoresJugadores = new ArrayList<>();
-        int porcentajeMasBajo = 100; //Partimos con el porcentaje más alto
+        List<PromedioJugadorDto> peoresJugadores = new ArrayList<>();
+        int porcentajeMasBajo = 100;
 
         if (todosLosJugadores.isEmpty()) {
-          throw  new EmptyPlayersListException();
+            throw  new EmptyPlayersListException("Lista de jugadores vacía");
         }
 
         for (JugadorEntity jugador : todosLosJugadores) {
             int miPorcentajeDeExito = jugador.getPorcentajeExito();
 
             if(miPorcentajeDeExito < porcentajeMasBajo){
-                // Si encontramos un jugador con un porcentaje más bajo, limpiamos la lista anterior
                 peoresJugadores.clear();
                 porcentajeMasBajo = miPorcentajeDeExito;
             }
             if (miPorcentajeDeExito == porcentajeMasBajo) {
-                JugadorDto jugadorDto = pasarEntidadADto(jugador);
-                peoresJugadores.add(jugadorDto);
+                PromedioJugadorDto promedioJugadorDto = converter.convertirJugadorEntityAPromedioJugadorDto(jugador);
+                peoresJugadores.add(promedioJugadorDto);
             }
         }
         return peoresJugadores;
     }
 
-    public JugadorEntity buscarJugadorPorId(Long id) {
-        Optional<JugadorEntity> jugadorOptional = jugadorRepository.findById(id);
+    @Override
+    public List<PromedioJugadorDto> bestScores() {
+        List<JugadorEntity> todosLosJugadores = jugadorRepository.findAll();
+        List<PromedioJugadorDto> mejoresJugadores = new ArrayList<>();
+        int porcentajeMasAlto = 0;
 
-        if (jugadorOptional.isPresent()) {
-            return jugadorOptional.get();
-        } else {
-            throw new PlayerNotFoundException(id);
+        if (todosLosJugadores.isEmpty()) {
+            throw new EmptyPlayersListException("Lista de jugadores vacía");
         }
+
+        for (JugadorEntity jugador : todosLosJugadores) {
+            int miPorcentajeDeExito = jugador.getPorcentajeExito();
+
+            if (miPorcentajeDeExito > porcentajeMasAlto) {
+                mejoresJugadores.clear();
+                porcentajeMasAlto = miPorcentajeDeExito;
+            }
+            if (miPorcentajeDeExito == porcentajeMasAlto) {
+                PromedioJugadorDto jugadorDto = converter.convertirJugadorEntityAPromedioJugadorDto(jugador);
+                mejoresJugadores.add(jugadorDto);
+            }
+        }
+
+        return mejoresJugadores;
     }
+
+    /*
+
     public List<JugadorDto> mejoresJugadores() throws NotFoundException {
         List<JugadorEntity> todosLosJugadores = jugadorRepository.findAll();
         List<JugadorDto> mejoresJugadores = new ArrayList<>();
@@ -169,20 +190,6 @@ public class JugadorServiceImpl implements JugadorService{
         return mejoresJugadores;
     }
 
-    //Metodos Privados----------------------------------------------------------------------->>
-
-    private int calculaPorcentajeExitoDeUnJugador(JugadorEntity jugador){
-        int porcentajeExito = 0, victorias;
-        List<PartidaEntity> misPartidas = partidaRepository.findByJugador(jugador);
-        int cantidadPartidas = misPartidas.size();
-
-        victorias = misPartidas.stream().mapToInt(PartidaEntity::getVictorias).sum();
-
-        if (cantidadPartidas > 0) {
-            porcentajeExito = (victorias * 100) / cantidadPartidas;
-        }
-        return porcentajeExito;
-    }
 */
 
 }
