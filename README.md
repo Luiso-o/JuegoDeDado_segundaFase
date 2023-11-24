@@ -13,7 +13,7 @@
 
 ## Opciones para descargar el proyecto:
 -  Puede descargar el proyecto en formato Zip.
--  clonando desde la consola de comandos de git con el comando git clone https://github.com/Luiso-o/ApiRestCrud-SkinsVideojuego.git
+-  clonando desde la consola de comandos de git con el comando git clone https://github.com/Luiso-o/JuegoDeDados_PrimeraFase.git
 
 ## Importante antes de usar la API:
 
