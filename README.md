@@ -1,6 +1,6 @@
 <!-- PROJECT LOGO -->
 <div align="center">
-    <img src="https://cdn-icons-png.flaticon.com/assets/128043647/adeecbda-dcf5-4065-b22d-757045e191aa" alt="Logo" width="80" height="80">
+    <img src="https://cdn-icons-png.flaticon.com/128043647/adeecbda-dcf5-4065-b22d-757045e191aa" alt="Logo" width="80" height="80">
 <h3 align="center">JuegoDeDados</h3>
 </div>
 
