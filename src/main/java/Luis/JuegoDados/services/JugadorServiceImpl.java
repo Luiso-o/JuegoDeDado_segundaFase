@@ -161,35 +161,4 @@ public class JugadorServiceImpl implements JugadorService{
 
         return mejoresJugadores;
     }
-
-    /*
-
-    public List<JugadorDto> mejoresJugadores() throws NotFoundException {
-        List<JugadorEntity> todosLosJugadores = jugadorRepository.findAll();
-        List<JugadorDto> mejoresJugadores = new ArrayList<>();
-        int porcentajeMasAlto = 0; // Partimos con el porcentaje más bajo
-
-        if (todosLosJugadores.isEmpty()) {
-            throw new EmptyPlayersListException();
-        }
-
-        for (JugadorEntity jugador : todosLosJugadores) {
-            int miPorcentajeDeExito = jugador.getPorcentajeExito();
-
-            if (miPorcentajeDeExito > porcentajeMasAlto) {
-                // Si encontramos un jugador con un porcentaje más alto, limpiamos la lista anterior
-                mejoresJugadores.clear();
-                porcentajeMasAlto = miPorcentajeDeExito;
-            }
-            if (miPorcentajeDeExito == porcentajeMasAlto) {
-                JugadorDto jugadorDto = pasarEntidadADto(jugador);
-                mejoresJugadores.add(jugadorDto);
-            }
-        }
-
-        return mejoresJugadores;
-    }
-
-*/
-
 }
