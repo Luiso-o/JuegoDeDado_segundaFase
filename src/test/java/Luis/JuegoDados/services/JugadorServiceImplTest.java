@@ -8,16 +8,15 @@ import Luis.JuegoDados.excepciones.PlayerNotFoundException;
 import Luis.JuegoDados.excepciones.PlayerNotSavedException;
 import Luis.JuegoDados.helper.FromEntityToDtoConverter;
 import Luis.JuegoDados.repository.JugadorRepository;
-import org.apache.catalina.LifecycleState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -143,5 +142,96 @@ class JugadorServiceImplTest {
         });
 
     }
-  
+
+    @Test
+    void  averagePlayerWinsTest(){
+        myList.get(0).setPorcentajeExito(10);
+        myList.get(1).setPorcentajeExito(10);
+        myList.get(2).setPorcentajeExito(10);
+        when(jugadorRepository.findAll()).thenReturn(myList);
+        int result = jugadorService.averagePlayerWins();
+        assertEquals(10,result);
+    }
+
+    @Test
+    void  averagePlayerWinsTestWithEmptyList(){
+        when(jugadorRepository.findAll()).thenReturn(new ArrayList<>());
+        int result = jugadorService.averagePlayerWins();
+        assertEquals(0,result);
+    }
+
+    @Test
+    void averagePlayerWinsTestError(){
+        doThrow(new RuntimeException("Error simulado al recuperar la lista de jugadores"))
+                .when(jugadorRepository).findAll();
+
+        assertThrows(EmptyPlayersListException.class, () -> {
+            jugadorService.averagePlayerWins();
+            verify(jugadorRepository, times(1)).findAll();
+        });
+    }
+
+    @Test
+    void lowestScoresTest(){
+        promedio3.setPorcentajeExito("Promedio de victorias " + 3 + " %");
+        myList.get(0).setPorcentajeExito(10);
+        myList.get(1).setPorcentajeExito(5);
+        myList.get(2).setPorcentajeExito(3);
+        when(jugadorRepository.findAll()).thenReturn(myList);
+        when(converter.convertirJugadorEntityAPromedioJugadorDto(any(JugadorEntity.class)))
+                .thenAnswer(invocation -> {
+                    JugadorEntity jugadorEntity = invocation.getArgument(0);
+                    return new PromedioJugadorDto(
+                            jugadorEntity.getNombreJugador(),
+                            "Promedio de victorias " + jugadorEntity.getPorcentajeExito() + " %"
+                    );
+                });
+
+        List<PromedioJugadorDto> averageList = jugadorService.lowestScores();
+        assertNotNull(averageList);
+        assertEquals(1, averageList.size());
+        assertEquals(promedio3, averageList.get(0));
+    }
+
+    @Test
+    void lowestScoresTestError(){
+        when(jugadorRepository.findAll()).thenReturn(Collections.emptyList());
+
+        assertThrows(EmptyPlayersListException.class, () -> {
+            jugadorService.lowestScores();
+            verify(jugadorRepository, times(1)).findAll();
+        });
+    }
+
+    @Test
+    void bestScoresTest(){
+        promedio1.setPorcentajeExito("Promedio de victorias " + 10 + " %");
+        myList.get(0).setPorcentajeExito(10);
+        myList.get(1).setPorcentajeExito(5);
+        myList.get(2).setPorcentajeExito(3);
+        when(jugadorRepository.findAll()).thenReturn(myList);
+        when(converter.convertirJugadorEntityAPromedioJugadorDto(any(JugadorEntity.class)))
+                .thenAnswer(invocation -> {
+                    JugadorEntity jugadorEntity = invocation.getArgument(0);
+                    return new PromedioJugadorDto(
+                            jugadorEntity.getNombreJugador(),
+                            "Promedio de victorias " + jugadorEntity.getPorcentajeExito() + " %"
+                    );
+                });
+
+        List<PromedioJugadorDto> averageList = jugadorService.bestScores();
+        assertNotNull(averageList);
+        assertEquals(1, averageList.size());
+        assertEquals(promedio1, averageList.get(0));
+    }
+
+    @Test
+    void bestScoresTestError(){
+        when(jugadorRepository.findAll()).thenReturn(Collections.emptyList());
+
+        assertThrows(EmptyPlayersListException.class, () -> {
+            jugadorService.bestScores();
+            verify(jugadorRepository, times(1)).findAll();
+        });
+    }
 }
