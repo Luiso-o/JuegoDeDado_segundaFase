@@ -18,8 +18,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
-@Builder
 @Service
 public class PartidaServiceImpl implements PartidaService{
 
